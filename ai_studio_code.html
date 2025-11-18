@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pak Earn</title>
+<style>
+/* ===== FINAL WHITE THEME ===== */
+:root {
+    --primary-yellow: #FFC107;
+    --gradient-start: #FFC107;
+    --gradient-end: #FFD54F;
+    --dark-bg: #ffffff; /* White BG */
+    --card-bg: #f7f7f7; /* Light Grey Cards */
+    --border-color: #dddddd;
+    --text-primary: #191919; /* Black Text */
+    --text-secondary: #666666; /* Grey Text */
+    --danger-red: #dc3545;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;}
+body{background: var(--dark-bg);color: var(--text-primary);}
+.page{display:none;padding:15px;height:85vh;overflow-y:auto;}
+.active{display:block;}
+header{padding:15px;text-align:center;font-size:22px;font-weight:bold;background: var(--card-bg);color: var(--text-primary);border-bottom: 1px solid var(--border-color);cursor: pointer;}
+.card{background: var(--card-bg);padding:20px;margin-top:15px;border-radius:15px;border: 1px solid var(--border-color);}
+.button{display:flex;align-items:center;justify-content:center;gap:8px;background-image: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));color: #191919; font-weight:bold; padding:14px 18px;border-radius:12px;margin-top:10px;cursor:pointer;width:100%;text-align:center;border: none;font-size:16px;box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);}
+.button-secondary {background-image: none; background-color: #e0e0e0; color: var(--text-primary);}
+.button-danger {background-image: none; background-color: var(--danger-red); color: #ffffff;}
+.navbar{position:fixed;bottom:0;width:100%;height:65px;background: var(--card-bg);display:flex;justify-content:space-around;align-items:center;border-top:1px solid var(--border-color);z-index:100;}
+.navbar button{background:none;border:none;font-size:12px;color: var(--text-secondary);font-weight:bold;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px; flex: 1;}
+.navbar img{width:24px;height:24px; filter: invert(40%);} /* Invert icons for dark text */
+.balance-highlight {background-image: linear-gradient(45deg, var(--gradient-start), var(--gradient-end)); padding: 25px;border-radius: 20px;text-align: center;color: #191919;box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
+.balance-highlight h4 {font-size: 16px;font-weight: normal;margin-bottom: 5px;opacity: 0.9;}
+.balance-highlight p {font-size: 36px;font-weight: bold;}
+.info-grid {display: grid;grid-template-columns: 1fr 1fr;gap: 15px;margin-top: 20px;}
+.info-item {background: var(--card-bg);padding: 15px;border-radius: 12px; text-align:center;}
+.info-item h4 {color: var(--text-secondary);margin-bottom: 5px;font-size: 14px;}
+.info-item p {font-size: 18px;font-weight: bold;}
+.task-item{display:flex;justify-content:space-between;align-items:center;margin:8px 0;padding:12px;background:#f0f0f0;border-radius:8px;}
+.task-item button{padding:6px 12px;font-size:13px; background: var(--primary-yellow); color: #191919; font-weight:bold; border: none; border-radius: 6px; cursor: pointer;}
+.task-item button:disabled {background: #cccccc; color: var(--text-secondary); cursor: not-allowed;}
+input, select {padding:14px;width:100%;border-radius:12px;border:1px solid var(--border-color);background: #ffffff;color: var(--text-primary);font-size: 16px; margin-bottom: 10px;}
+.phone-input-container {display: flex; align-items: center; background: #ffffff; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 10px;}
+.phone-input-container span {padding: 14px; color: var(--text-secondary);}
+.phone-input-container input {border: none; background: transparent; flex-grow: 1; margin-bottom: 0;}
+.profile-pic-container {text-align: center; margin-bottom: 15px;}
+#profilePicture {width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--primary-yellow); object-fit: cover; cursor: pointer;}
+.profile-menu .button {background: var(--card-bg); justify-content: flex-start; padding: 12px 15px; box-shadow:none; background-image:none; border: 1px solid var(--border-color); color: var(--text-primary); font-weight: normal; margin-bottom: 10px; margin-top:0;}
+.profile-menu .button:last-child {margin-bottom: 0;}
+.profile-menu .button img {width: 20px; height: 20px; filter: invert(40%);}
+.floating-support-btn {position: fixed; bottom: 80px; right: 20px; width: 60px; height: 60px; background-color: var(--primary-yellow); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.4); z-index: 99; text-decoration: none;}
+.floating-support-btn img {filter: none;}
+.admin-user-card { background: #f0f0f0; padding: 15px; border-radius: 8px; margin-bottom: 10px; }
+.vip-card-details p { margin: 4px 0; }
+.detail-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e7e7e7; }
+.detail-row span:first-child { color: var(--text-secondary); }
+.detail-row span:last-child { font-weight: bold; }
+.history-card { background: #f0f0f0; padding: 15px; border-radius: 10px; margin-bottom: 10px; }
+.history-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 14px; }
+.history-label { color: var(--text-secondary); }
+.history-value { color: var(--text-primary); font-weight: 600; }
+.status { font-weight: bold; }
+.status-Pending { color: #FFC107; }
+.status-Approved { color: #28a745; }
+.status-Rejected { color: #dc3545; }
+hr.card-divider { border-color: var(--border-color); opacity: 0.5; margin: 10px 0; }
+</style>
+</head>
+<body>
+
+<header id="appHeader">Welcome to Pak Earn</header>
+
+<!-- AUTH PAGES -->
+<div id="authPage" class="page active"><div class="auth-container" style="text-align:center;"><h2>Welcome!</h2><p>Login or Register to continue.</p><br><button class="button" onclick="openPage('loginPage')">Login</button><button class="button" onclick="openPage('registerPage')">Register</button></div></div>
+<div id="loginPage" class="page"><div class="card"><h2>User Login</h2><div class="phone-input-container"><span>+92</span><input type="number" id="loginPhone" placeholder="3001234567"></div><input type="password" id="loginPassword" placeholder="Password"><button class="button" onclick="loginUser()">Login</button><p onclick="openPage('forgotPasswordPage')" style="text-align:center;margin-top:10px;cursor:pointer;">Forgot Password?</p><button class="button button-secondary" onclick="openPage('authPage')">Back</button></div></div>
+<div id="registerPage" class="page"><div class="card"><h2>Create Account</h2><input type="text" id="registerFirstName" placeholder="First Name"><input type="text" id="registerLastName" placeholder="Last Name"><div class="phone-input-container"><span>+92</span><input type="number" id="registerPhone" placeholder="3001234567"></div><input type="email" id="registerEmail" placeholder="Email"><input type="password" id="registerPassword" placeholder="Password"><input type="password" id="registerConfirmPassword" placeholder="Confirm Password"><button class="button" onclick="registerUser()">Register</button><button class="button button-secondary" onclick="openPage('authPage')">Back</button></div></div>
+<div id="forgotPasswordPage" class="page"><div class="card"><h2>Forgot Password</h2><div class="phone-input-container"><span>+92</span><input type="number" id="forgotPhone" placeholder="Enter Your Number"></div><button class="button" onclick="openPage('forgotPasswordResetPage')">Next</button><button class="button button-secondary" onclick="openPage('loginPage')">Back</button></div></div>
+<div id="forgotPasswordResetPage" class="page"><div class="card"><h2>Reset Password</h2><input type="password" placeholder="New Password"><input type="password" placeholder="Confirm New Password"><button class="button" onclick="alert('Password Reset Successfully!'); openPage('loginPage');">Update Password</button><button class="button button-secondary" onclick="openPage('forgotPasswordPage')">Back</button></div></div>
+<div id="adminLoginPage" class="page"><div class="card"><h2>Admin Login</h2><input type="text" id="adminUser" placeholder="Admin Username"><input type="password" id="adminPass" placeholder="Admin Password"><button class="button" onclick="adminLogin()">Login</button><button class="button button-secondary" onclick="openPage('authPage')">Back</button></div></div>
+
+<!-- MAIN APP PAGES -->
+<div id="home" class="page">
+    <div class="balance-highlight"><h4>Total Balance</h4><p id="walletBalanceHome">PKR 0.00</p></div>
+    <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button class="button" onclick="openPage('depositAmountPage')">Deposit</button>
+        <button class="button" onclick="openPage('withdrawPage')">Withdraw</button>
+    </div>
+    <div class="info-grid"><div class="info-item"><h4>Total Earning</h4><p id="totalEarning">PKR 0</p></div><div class="info-item"><h4>Total Deposit</h4><p id="totalDeposit">PKR 0</p></div><div class="info-item"><h4>Total Withdraw</h4><p id="totalWithdraw">PKR 0</p></div></div>
+</div>
+<div id="tasks" class="page"><div class="card"><h2>Daily Tasks</h2><div id="taskList"></div></div></div>
+<div id="vip" class="page">
+    <div class="card vip-card-details"><h3>VIP 1</h3><p>$2 (600 PKR)</p><p>Daily 3 Tasks | 60 Days</p><p>Total Earn: $18</p><button class="button" onclick="buyVIP(1)">Buy Plan</button></div>
+    <div class="card vip-card-details"><h3>VIP 2</h3><p>$5 (1500 PKR)</p><p>Daily 7 Tasks | 60 Days</p><p>Total Earn: $42</p><button class="button" onclick="buyVIP(2)">Buy Plan</button></div>
+    <div class="card vip-card-details"><h3>VIP 3</h3><p>$10 (3000 PKR)</p><p>Daily 14 Tasks | 60 Days</p><p>Total Earn: $84</p><button class="button" onclick="buyVIP(3)">Buy Plan</button></div>
+    <div class="card vip-card-details"><h3>VIP 4</h3><p>$15 (4500 PKR)</p><p>Daily 21 Tasks | 60 Days</p><p>Total Earn: $126</p><button class="button" onclick="buyVIP(4)">Buy Plan</button></div>
+    <div class="card vip-card-details"><h3>VIP 5</h3><p>$50 (15000 PKR)</p><p>Daily 80 Tasks | 60 Days</p><p>Total Earn: $480</p><button class="button" onclick="buyVIP(5)">Buy Plan</button></div>
+</div>
+<div id="referral" class="page"><div class="card"><h2>Referral Program</h2><p>Invite friends and earn a commission on their earnings! Share your unique link below to get started.</p><input id="refLink" readonly><button class="button" onclick="copyRef()">Copy Link</button></div></div>
+
+<!-- PROFILE PAGE & SUB-PAGES -->
+<div id="profilePage" class="page">
+    <div class="card">
+        <div class="profile-pic-container"><input type="file" id="profilePicInput" style="display:none;" accept="image/*" onchange="handleProfilePictureChange(event)"><img src="https://img.icons8.com/fluency-systems-filled/96/ffffff/user-male-circle.png" id="profilePicture" onclick="document.getElementById('profilePicInput').click()"></div>
+        <div style="text-align:center; margin-top: 10px;"><p>Plan Expires on: <strong id="planExpiryDate">No Active Plan</strong></p><p>New Tasks in: <strong id="taskRefreshTimer">--:--:--</strong></p></div>
+    </div>
+    <div class="card profile-menu">
+        <button class="button" onclick="openPage('accountInfoPage')"><img src="https://img.icons8.com/material-rounded/48/ffffff/user-male-circle.png"/>Account Information</button>
+        <button class="button" onclick="openPage('depositHistoryPage')"><img src="https://img.icons8.com/material-rounded/48/ffffff/downloading-updates.png"/>Deposit History</button>
+        <button class="button" onclick="openPage('withdrawalHistoryPage')"><img src="https://img.icons8.com/material-rounded/48/ffffff/initiate-money-transfer.png"/>Withdrawal History</button>
+        <button class="button" onclick="openPage('myTeamPage')"><img src="https://img.icons8.com/material-rounded/48/ffffff/conference-call.png"/>My Team</button>
+        <button class="button" onclick="window.open('https://whatsapp.com/channel/0029VbBZaKN42DcVqJibLr2w', '_blank')"><img src="https://img.icons8.com/material-rounded/48/ffffff/headset.png"/>Customer Service</button>
+        <button class="button" onclick="openPage('changePasswordPage')"><img src="https://img.icons8.com/material-rounded/48/ffffff/password.png"/>Change Password</button>
+        <button class="button button-danger" onclick="logout()"><img src="https://img.icons8.com/material-rounded/48/ffffff/logout-rounded-left.png"/>Logout</button>
+    </div>
+</div>
+<div id="accountInfoPage" class="page"><div class="card"><h2>Account Information</h2><div id="userInfoDisplay"></div><button class="button button-secondary" onclick="openPage('profilePage')">Back</button></div></div>
+<div id="myTeamPage" class="page"><div class="card"><h2>My Team</h2><div id="myTeamList"></div><button class="button button-secondary" onclick="openPage('profilePage')">Back</button></div></div>
+<div id="changePasswordPage" class="page"><div class="card"><h2>Change Password</h2><input type="password" placeholder="Old Password"><input type="password" placeholder="New Password"><input type="password" placeholder="Confirm New Password"><button class="button" onclick="alert('Password Changed Successfully!')">Update Password</button><button class="button button-secondary" onclick="openPage('profilePage')">Back</button></div></div>
+
+<!-- TRANSACTION HISTORY PAGES -->
+<div id="depositHistoryPage" class="page"><h2>Deposit History</h2><div id="depositHistoryList"></div><button class="button button-secondary" onclick="openPage('profilePage')">Back</button></div>
+<div id="withdrawalHistoryPage" class="page"><h2>Withdrawal History</h2><div id="withdrawalHistoryList"></div><button class="button button-secondary" onclick="openPage('profilePage')">Back</button></div>
+
+<!-- DEPOSIT & WITHDRAW PAGES -->
+<div id="depositAmountPage" class="page">
+    <h2>Deposit</h2>
+    <div class="card">
+        <label>Enter Amount ($)</label>
+        <input type="number" id="depositAmountUSDT" placeholder="Enter Amount in $" oninput="updateDepositDetails()">
+        <div class="detail-row"><span>Limit</span> <span>$2.00 - $10000.00</span></div>
+        <div class="detail-row"><span>Charge</span> <span>$0.00</span></div>
+        <div class="detail-row"><span>Conversion Rate</span> <span>1$ = 300 PKR</span></div>
+        <div class="detail-row"><span>In RS</span> <span id="depositAmountPKR">0.00 PKR</span></div>
+        <button class="button" onclick="proceedToDepositConfirmation()">Submit</button>
+        <button class="button button-secondary" onclick="openPage('home')">Back</button>
+    </div>
+</div>
+<div id="depositConfirmPage" class="page">
+    <h2>Confirm Deposit</h2>
+    <div class="card">
+        <p>You have requested <strong id="requestedUSDT"></strong>, Please pay <strong id="payablePKR" style="color:var(--primary-yellow);"></strong> for successful payment.</p>
+        <p style="margin-top:10px;">Please follow the instruction below:</p>
+        <hr style="border-color: var(--border-color); margin: 15px 0;">
+        <div class="payment-details">
+            <h3 style="color:var(--primary-yellow);">Easypaisa</h3>
+            <div class="detail-row" style="padding:15px 0;"><span>Account Name</span> <span>Muhammad Haneef</span></div>
+            <div class="detail-row"><span>Account Number</span> <span>03702846151</span></div>
+        </div>
+        <p style="text-align:center; margin: 15px 0; font-size: 14px;">✅ Deposit verification will be completed within 1–2 hours</p>
+        <hr style="border-color: var(--border-color); margin: 15px 0;">
+        <input type="text" id="transactionID" placeholder="Transaction ID (TID)">
+        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 5px;">Upload Payment Screenshot:</p>
+        <input type="file" id="paymentScreenshot" accept="image/*">
+        <button class="button" onclick="submitDeposit()">Submit</button>
+        <button class="button button-secondary" onclick="openPage('depositAmountPage')">Back</button>
+    </div>
+</div>
+<div id="withdrawPage" class="page">
+    <h2>Withdrawal</h2>
+    <div class="card">
+        <label>Select Method</label>
+        <select id="withdrawMethod"><option value="Easypaisa">Easypaisa</option><option value="JazzCash">JazzCash</option></select>
+        <label>Enter Account Number</label>
+        <input type="text" id="withdrawAccountInfo" placeholder="e.g. 03001234567">
+        <label>Enter Amount ($)</label>
+        <input type="number" id="withdrawAmountUSDT" placeholder="Enter Amount in $" oninput="updateWithdrawDetails()">
+        <div class="detail-row"><span>Limit</span> <span>$1.00 - $100000.00</span></div>
+        <div class="detail-row"><span>Charge</span> <span>$0.00</span></div>
+        <div class="detail-row"><span>Receivable</span> <span id="receivableUSDT">$0.00</span></div>
+        <div class="detail-row"><span>Conversion Rate</span> <span>1$ = 300 PKR</span></div>
+        <div class="detail-row"><span>In RS</span> <span id="withdrawAmountPKR">0.00 PKR</span></div>
+        <button class="button" id="withdrawSubmitBtn" onclick="submitWithdraw()">Submit Withdraw Request</button>
+        <button class="button button-secondary" onclick="openPage('home')">Back</button>
+    </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel" class="page"><div class="card"><h2>Admin Dashboard</h2></div><div class="card"><h3>Pending Requests</h3><div id="adminRequestsList"><p>No pending requests.</p></div></div><div class="card"><h3>User Management</h3><div id="adminUserList"></div></div><button class="button button-danger" onclick="logoutAdmin()">Logout</button></div>
+
+<!-- FLOATING SUPPORT BUTTON -->
+<a id="supportBtn" class="floating-support-btn" href="https://whatsapp.com/channel/0029VbBZaKN42DcVqJibLr2w" target="_blank" style="display:none;"><img src="https://img.icons8.com/fluency-systems-filled/48/ffffff/headset.png" width="32"/></a>
+
+<!-- NAVIGATION BAR -->
+<div id="mainApp" style="display:none;"><div class="navbar"><button onclick="openPage('home')"><img src="https://img.icons8.com/fluency-systems-filled/48/ffffff/home.png"/><span>Home</span></button><button onclick="openPage('tasks')"><img src="https://img.icons8.com/fluency-systems-filled/48/ffffff/task.png"/><span>Tasks</span></button><button onclick="openPage('vip')"><img src="https://img.icons8.com/fluency-systems-filled/48/ffffff/crown.png"/><span>VIP</span></button><button onclick="openPage('referral')"><img src="https://img.icons8.com/fluency-systems-filled/48/ffffff/share.png"/><span>Referral</span></button><button onclick="openPage('profilePage')"><img src="https://img.icons8.com/fluency-systems-filled/48/ffffff/user-male-circle.png"/><span>Profile</span></button></div></div>
+
+<script>
+// --- APP STATE & CONSTANTS ---
+const USDTtoPKR = 300;
+const TASK_REWARD_PKR = 30; // $0.1
+const MIN_DEPOSIT_USDT = 2;
+const MIN_WITHDRAW_USDT = 1;
+const TOTAL_TASKS_TO_SHOW = 50;
+const vipPlans = [{level:0,cost:0,tasks:0},{level:1,cost:2,tasks:3},{level:2,cost:5,tasks:7},{level:3,cost:10,tasks:14},{level:4,cost:15,tasks:21},{level:5,cost:50,tasks:80},];
+let users = [], currentUser = null, timerInterval;
+
+// --- CORE FUNCTIONS ---
+function loadState() { users = JSON.parse(localStorage.getItem('users')) || []; const currentUserPhone = localStorage.getItem('currentUserPhone'); if (currentUserPhone) { currentUser = users.find(u => u.phone === currentUserPhone); } }
+function saveData() { localStorage.setItem('users', JSON.stringify(users)); if(currentUser) localStorage.setItem('currentUserPhone', currentUser.phone); }
+function openPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+    document.getElementById(page).style.display = 'block';
+    localStorage.setItem('currentPage', page);
+    if (page === 'tasks') { loadTasks(); }
+    else if (page === 'profilePage') { displayPlanExpiry(); startTaskRefreshTimer(); }
+    else if (page === 'accountInfoPage') { displayAccountInfo(); }
+    else if (page === 'myTeamPage') { displayMyTeam(); }
+    else if (page === 'depositHistoryPage') { displayTransactionHistory('Deposit'); }
+    else if (page === 'withdrawalHistoryPage') { displayTransactionHistory('Withdrawal'); }
+    else { if (timerInterval) clearInterval(timerInterval); }
+}
+function showMainApp(isLoggedIn) {
+    document.getElementById('mainApp').style.display = isLoggedIn ? 'flex' : 'none';
+    document.getElementById('supportBtn').style.display = isLoggedIn ? 'flex' : 'none';
+    let startPage = localStorage.getItem('currentPage');
+    if (isLoggedIn && (!startPage || ['loginPage', 'registerPage', 'authPage', 'forgotPasswordPage', 'forgotPasswordResetPage'].includes(startPage))) {
+        startPage = 'home';
+    }
+    openPage(isLoggedIn ? startPage : 'authPage');
+}
+
+function registerUser() {
+    const firstName = document.getElementById('registerFirstName').value, lastName = document.getElementById('registerLastName').value, phone = document.getElementById('registerPhone').value, email = document.getElementById('registerEmail').value, password = document.getElementById('registerPassword').value, confirmPassword = document.getElementById('registerConfirmPassword').value;
+    if (phone.length !== 10) { return alert('Please enter a valid 10-digit phone number (e.g., 3001234567).'); }
+    if (!firstName || !lastName || !phone || !email || !password) return alert('Please fill all fields.');
+    if (!email.trim().toLowerCase().endsWith('@gmail.com')) { return alert('Wrong email. Please use a valid @gmail.com address.');}
+    if (password !== confirmPassword) return alert('Passwords do not match.');
+    if (users.find(u => u.phone === phone)) return alert('Phone number already registered. Please login.');
+    const newUser = { firstName, lastName, phone, email, password, balance: 0, totalDeposit: 0, totalWithdraw: 0, totalEarning: 0, vip: 0, completedTasksCount: 0, lastTaskResetDate: '', vipPurchaseDate: null, transactions: [], profilePic: 'https://img.icons8.com/fluency-systems-filled/96/ffffff/user-male-circle.png', team: [], referredBy: null };
+    const referrerPhone = localStorage.getItem('referrerCode');
+    if (referrerPhone) {
+        const referrer = users.find(u => u.phone === referrerPhone);
+        if (referrer) {
+            referrer.team.push(`${firstName} ${lastName} (+92${phone})`);
+            newUser.referredBy = referrerPhone;
+        }
+    }
+    users.push(newUser);
+    saveData();
+    localStorage.removeItem('referrerCode');
+    alert("Registration successful! Please login.");
+    openPage('loginPage');
+}
+
+function loginUser() {
+    const phone = document.getElementById('loginPhone').value, password = document.getElementById('loginPassword').value;
+    const user = users.find(u => u.phone === phone && u.password === password);
+    if (user) {
+        currentUser = user;
+        localStorage.setItem('currentUserPhone', currentUser.phone);
+        updateBalance();
+        document.getElementById('profilePicture').src = user.profilePic || 'https://img.icons8.com/fluency-systems-filled/96/ffffff/user-male-circle.png';
+        const appURL = window.location.origin + window.location.pathname;
+        document.getElementById('refLink').value = `${appURL}?ref=${currentUser.phone}`;
+        showMainApp(true);
+    } else { alert('Invalid phone number or password.'); }
+}
+
+function logout() { localStorage.removeItem('currentUserPhone'); currentUser = null; location.reload(); }
+
+function proceedToDepositConfirmation() {
+    let amountUSDT = parseFloat(document.getElementById('depositAmountUSDT').value);
+    if (!amountUSDT || amountUSDT < MIN_DEPOSIT_USDT) { alert(`Minimum deposit is $${MIN_DEPOSIT_USDT}.`); return; }
+    const tempDepositInfo = { usdt: amountUSDT, pkr: amountUSDT * USDTtoPKR };
+    sessionStorage.setItem('tempDeposit', JSON.stringify(tempDepositInfo));
+    document.getElementById('requestedUSDT').innerText = `$${tempDepositInfo.usdt.toFixed(2)}`;
+    document.getElementById('payablePKR').innerText = `PKR ${tempDepositInfo.pkr.toFixed(2)}`;
+    openPage('depositConfirmPage');
+}
+
+function submitDeposit() {
+    const tempDepositInfo = JSON.parse(sessionStorage.getItem('tempDeposit'));
+    if (!tempDepositInfo) { alert("Something went wrong. Please start the deposit process again."); openPage('depositAmountPage'); return; }
+    let trans = document.getElementById('transactionID').value;
+    let file = document.getElementById('paymentScreenshot').files[0];
+    if (!trans || !file) { alert('Please provide Transaction ID and Screenshot.'); return; }
+    const newRequest = { id: Date.now(), userPhone: currentUser.phone, type: 'Deposit', amountUSDT: tempDepositInfo.usdt, amountPKR: tempDepositInfo.pkr, txnId: trans, status: 'Pending', date: new Date().toISOString() };
+    let allTransactions = JSON.parse(localStorage.getItem('allTransactions')) || [];
+    allTransactions.push(newRequest);
+    localStorage.setItem('allTransactions', JSON.stringify(allTransactions));
+    sessionStorage.removeItem('tempDeposit');
+    alert("Deposit request sent for admin approval!");
+    openPage('home');
+}
+
+function submitWithdraw() {
+    let amtUSDT = parseFloat(document.getElementById('withdrawAmountUSDT').value);
+    let method = document.getElementById('withdrawMethod').value;
+    let number = document.getElementById('withdrawAccountInfo').value;
+    if (!amtUSDT || !number) { alert('Please fill all fields.'); return; }
+    if (amtUSDT < MIN_WITHDRAW_USDT) { alert(`Minimum withdrawal is $${MIN_WITHDRAW_USDT}.`); return; }
+    let amtPKR = amtUSDT * USDTtoPKR;
+    if (amtPKR > currentUser.balance) { alert("Insufficient balance."); return; }
+    const newRequest = { id: Date.now(), userPhone: currentUser.phone, type: 'Withdrawal', amountUSDT: amtUSDT, amountPKR: amtPKR, account: `${method} - ${number}`, status: 'Pending', date: new Date().toISOString() };
+    let allTransactions = JSON.parse(localStorage.getItem('allTransactions')) || [];
+    allTransactions.push(newRequest);
+    localStorage.setItem('allTransactions', JSON.stringify(allTransactions));
+    alert("Withdrawal request sent for admin approval!");
+    openPage('home');
+}
+function buyVIP(level) { const plan = vipPlans.find(p => p.level === level); const costPKR = plan.cost * USDTtoPKR; if (currentUser.balance < costPKR) { alert("Insufficient balance."); return; } if (confirm(`This will deduct PKR ${costPKR} from your balance. Are you sure?`)) { currentUser.balance -= costPKR; currentUser.vip = level; currentUser.completedTasksCount = 0; currentUser.vipPurchaseDate = new Date().toISOString(); saveData(); alert(`VIP ${level} purchased successfully!`); updateBalance(); } }
+function getPakistaniDateString() { return new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Karachi' }); }
+function checkAndResetTasks() { const today = getPakistaniDateString(); if (today !== currentUser.lastTaskResetDate) { currentUser.completedTasksCount = 0; currentUser.lastTaskResetDate = today; saveData(); } }
+function loadTasks() {
+    checkAndResetTasks();
+    const taskList = document.getElementById("taskList");
+    taskList.innerHTML = "";
+    const dailyTaskLimit = vipPlans.find(p => p.level === currentUser.vip)?.tasks || 0;
+    for (let i = 1; i <= TOTAL_TASKS_TO_SHOW; i++) {
+        const isCompleted = i <= currentUser.completedTasksCount;
+        const isLocked = currentUser.vip === 0 || currentUser.completedTasksCount >= dailyTaskLimit;
+        const buttonDisabled = isCompleted || (isLocked && i > currentUser.completedTasksCount);
+        const buttonText = isCompleted ? 'Completed' : (currentUser.vip === 0 ? 'Buy VIP' : 'Complete');
+        taskList.innerHTML += `<div class="task-item"><span>Google Ads Task ${i}</span> <button onclick="completeTask(this, ${i})" ${buttonDisabled ? 'disabled' : ''}>${buttonText}</button></div>`;
+    }
+}
+function completeTask(btn, taskNumber) {
+    const dailyTaskLimit = vipPlans.find(p => p.level === currentUser.vip)?.tasks || 0;
+    if (currentUser.completedTasksCount >= dailyTaskLimit) return;
+    if (taskNumber > currentUser.completedTasksCount + 1) { alert("Please complete tasks in order."); return; }
+    btn.disabled = true; let sec = 20; btn.innerText = `Wait ${sec}s`;
+    let timer = setInterval(() => { sec--; btn.innerText = `Wait ${sec}s`; if (sec === 0) { clearInterval(timer); currentUser.balance += TASK_REWARD_PKR; currentUser.totalEarning += TASK_REWARD_PKR; currentUser.completedTasksCount++; saveData(); updateBalance(); loadTasks(); } }, 1000);
+}
+function updateDepositDetails() { let amountUSDT = parseFloat(document.getElementById('depositAmountUSDT').value) || 0; document.getElementById('depositAmountPKR').innerText = (amountUSDT * USDTtoPKR).toFixed(2) + " PKR"; }
+function updateWithdrawDetails() { let amountUSDT = parseFloat(document.getElementById('withdrawAmountUSDT').value) || 0; document.getElementById('receivableUSDT').innerText = "$" + amountUSDT.toFixed(2); document.getElementById('withdrawAmountPKR').innerText = (amountUSDT * USDTtoPKR).toFixed(2) + " PKR"; }
+function copyRef() { navigator.clipboard.writeText(document.getElementById("refLink").value); alert("Link copied!"); }
+function updateBalance() { if (!currentUser) return; document.getElementById('walletBalanceHome').innerText = "PKR " + currentUser.balance.toFixed(2); document.getElementById('totalEarning').innerText = "PKR " + currentUser.totalEarning.toFixed(2); document.getElementById('totalDeposit').innerText = "PKR " + currentUser.totalDeposit.toFixed(2); document.getElementById('totalWithdraw').innerText = "PKR " + currentUser.totalWithdraw.toFixed(2); if(document.getElementById('withdrawSubmitBtn')) { document.getElementById('withdrawSubmitBtn').disabled = currentUser.balance <= 0; } }
+function handleProfilePictureChange(event) { const reader = new FileReader(); reader.onload = function () { document.getElementById('profilePicture').src = reader.result; currentUser.profilePic = reader.result; saveData(); }; reader.readAsDataURL(event.target.files[0]); }
+function displayPlanExpiry() { if (currentUser.vip > 0 && currentUser.vipPurchaseDate) { const purchaseDate = new Date(currentUser.vipPurchaseDate); purchaseDate.setDate(purchaseDate.getDate() + 60); document.getElementById('planExpiryDate').innerText = purchaseDate.toLocaleDateString(); } else { document.getElementById('planExpiryDate').innerText = 'No Active Plan'; } }
+function startTaskRefreshTimer() { if (timerInterval) clearInterval(timerInterval); const timerEl = document.getElementById('taskRefreshTimer'); const update = () => { const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Karachi' })); const tomorrow = new Date(now); tomorrow.setDate(tomorrow.getDate() + 1); tomorrow.setHours(0, 0, 0, 0); const diff = tomorrow - now; const h = Math.floor(diff / 3600000); const m = Math.floor((diff % 3600000) / 60000); const s = Math.floor((diff % 60000) / 1000); timerEl.innerText = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`; }; update(); timerInterval = setInterval(update, 1000); }
+function displayAccountInfo() { document.getElementById('userInfoDisplay').innerHTML = `<p><strong>Name:</strong> ${currentUser.firstName} ${currentUser.lastName}</p><p><strong>Phone:</strong> +92${currentUser.phone}</p><p><strong>Email:</strong> ${currentUser.email}</p>`; }
+function displayMyTeam() { document.getElementById('myTeamList').innerHTML = currentUser.team.length > 0 ? currentUser.team.map(member => `<p>${member}</p>`).join('') : '<p>You have not invited anyone yet.</p>'; }
+function displayTransactionHistory(type) {
+    const listId = type === 'Deposit' ? 'depositHistoryList' : 'withdrawalHistoryList';
+    const listEl = document.getElementById(listId);
+    let allTransactions = JSON.parse(localStorage.getItem('allTransactions')) || [];
+    const userTransactions = allTransactions.filter(t => t.userPhone === currentUser.phone && t.type === type).sort((a, b) => b.id - a.id);
+    if (userTransactions.length === 0) { listEl.innerHTML = `<div class="card" style="text-align:center;"><p>No ${type.toLowerCase()} history found.</p></div>`; return; }
+    listEl.innerHTML = userTransactions.map(t => {
+        const date = new Date(t.date);
+        const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+        const formattedDate = date.toLocaleDateString('en-GB');
+        const status = t.status === 'Pending' ? 'Processing' : t.status;
+        const statusClass = t.status;
+        return `
+            <div class="history-card">
+                <div class="history-row"><span class="history-label">Amount $:</span><span class="history-value">$${t.amountUSDT.toFixed(2)}</span></div>
+                <div class="history-row"><span class="history-label">Amount PKR:</span><span class="history-value">PKR ${t.amountPKR.toFixed(2)}</span></div>
+                 <hr class="card-divider">
+                <div class="history-row"><span class="history-label">${type} Time:</span><span class="history-value">${formattedDate} ${formattedTime}</span></div>
+                <div class="history-row"><span class="history-label">Status:</span><span class="history-value status status-${statusClass}">${status}</span></div>
+            </div>`;
+    }).join('');
+}
+const ADMIN_USER = 'mhaneefgqw'; const ADMIN_PASS = '14725369Gqw'; let headerClicks = 0;
+function setupAdminListener() { const header = document.getElementById('appHeader'); if (header) { header.addEventListener('click', () => { headerClicks++; setTimeout(() => headerClicks = 0, 2000); if (headerClicks >= 5) openPage('adminLoginPage'); }); } }
+function adminLogin() { let u = document.getElementById('adminUser').value; let p = document.getElementById('adminPass').value; if (u === ADMIN_USER && p === ADMIN_PASS) { loadAdminPanel(); openPage('adminPanel'); } else alert('Invalid Credentials!'); }
+function loadAdminPanel() {
+    let allTransactions = JSON.parse(localStorage.getItem('allTransactions')) || [];
+    const requestsList = document.getElementById('adminRequestsList');
+    requestsList.innerHTML = '';
+    const pending = allTransactions.filter(t => t.status === 'Pending').sort((a, b) => b.id - a.id);
+    if (pending.length === 0) { requestsList.innerHTML = '<p>No pending requests.</p>'; }
+    else { requestsList.innerHTML = pending.map(t => { let details = t.type === 'Deposit' ? `<div class="history-row"><span class="history-label">Txn ID:</span> <span class="history-value">${t.txnId}</span></div>` : `<div class="history-row"><span class="history-label">Account:</span> <span class="history-value">${t.account}</span></div>`; return ` <div class="admin-user-card"> <div class="history-row"> <span class="history-label">User:</span> <span class="history-value">+92${t.userPhone}</span> </div> <div class="history-row"> <span class="history-label">Request Type:</span> <span class="history-value">${t.type}</span> </div> <div class="history-row"> <span class="history-label">Amount:</span> <span class="history-value" style="color: var(--primary-yellow);">PKR ${t.amountPKR.toFixed(2)}</span> </div> ${details} <div style="display:flex; gap:10px; margin-top:15px;"> <button class="button" style="padding:8px 12px; font-size:14px; margin-top:0;" onclick="handleRequest(${t.id}, true)">Approve</button> <button class="button button-danger" style="padding:8px 12px; font-size:14px; margin-top:0;" onclick="handleRequest(${t.id}, false)">Reject</button> </div> </div> `; }).join(''); }
+    const userList = document.getElementById('adminUserList');
+    userList.innerHTML = '';
+    users.forEach(u => { userList.innerHTML += `<div class="admin-user-card"><p><strong>${u.firstName} ${u.lastName}</strong> (+92${u.phone})</p><p>Balance: PKR ${u.balance.toFixed(2)}</p><button class="button button-secondary" style="padding:5px 10px; font-size:12px;" onclick="adminAdjustBalance('${u.phone}')">Adjust Balance</button></div>`; });
+}
+function handleRequest(id, isApproved) {
+    let allTransactions = JSON.parse(localStorage.getItem('allTransactions')) || [];
+    let transaction = allTransactions.find(t => t.id === id);
+    if (!transaction) return;
+    let user = users.find(u => u.phone === transaction.userPhone);
+    if (isApproved) {
+        transaction.status = 'Approved';
+        if (transaction.type === 'Deposit') { user.balance += transaction.amountPKR; user.totalDeposit += transaction.amountPKR; }
+        else if (transaction.type === 'Withdrawal') { user.balance -= transaction.amountPKR; user.totalWithdraw += transaction.amountPKR; }
+    } else { transaction.status = 'Rejected'; }
+    localStorage.setItem('allTransactions', JSON.stringify(allTransactions));
+    saveData();
+    loadAdminPanel();
+}
+function adminAdjustBalance(phone) {
+    const amount = parseFloat(prompt(`Enter amount to add/subtract for user ${phone}.\n(Use negative value to subtract, e.g., -100)`));
+    if (isNaN(amount)) return alert('Invalid amount.');
+    let user = users.find(u => u.phone === phone);
+    user.balance += amount;
+    saveData();
+    loadAdminPanel();
+    alert(`Balance for ${phone} adjusted by ${amount}. New balance: ${user.balance.toFixed(2)}`);
+}
+function logoutAdmin() { openPage('authPage'); }
+
+// --- INITIAL APP LOAD ---
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const refCode = urlParams.get('ref');
+    if (refCode) {
+        localStorage.setItem('referrerCode', refCode);
+    }
+    loadState();
+    if (currentUser) {
+        const appURL = window.location.origin + window.location.pathname;
+        document.getElementById('refLink').value = `${appURL}?ref=${currentUser.phone}`;
+        document.getElementById('profilePicture').src = currentUser.profilePic || 'https://img.icons8.com/fluency-systems-filled/96/ffffff/user-male-circle.png';
+        updateBalance();
+    }
+    showMainApp(!!currentUser);
+    setupAdminListener();
+});
+</script>
+</body>
+</html>
